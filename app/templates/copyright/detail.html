@@ -40,4 +40,10 @@
         </div>
     </div>
 </div>
+{% if current_user.is_authenticated and copyright.user_id == current_user.id %}
+<a href="{{ url_for('contract.initiate_transfer', copyright_id=copyright.id) }}" 
+   class="btn btn-primary">转让版权</a>
+{% endif %}
+<a href="{{ url_for('contract.verify_owner', copyright_id=copyright.id) }}" 
+   class="btn btn-info">验证所有权</a>
 {% endblock %} 

@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}验证版权所有权{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h4>版权所有权验证</h4>
+        </div>
+        <div class="card-body">
+            <h5>作品：{{ copyright.title }}</h5>
+            <p>当前所有者：{{ copyright.author.username }}</p>
+            
+            <div class="row mt-4">
+                <!-- 数据库记录 -->
+                <div class="col-md-6">
+                    <h6>数据库转让记录</h6>
+                    {% if transfer_history %}
+                    <div class="list-group">
+                        {% for record in transfer_history %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    转让记录 #{{ record.id }}
+                                </div>
+                                <small class="text-muted">
+                                    {{ record.created_at.strftime('%Y-%m-%d %H:%M:%S') }}
+                                </small>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">暂无转让记录</p>
+                    {% endif %}
+                </div>
+                
+                <!-- 区块链记录 -->
+                <div class="col-md-6">
+                    <h6>区块链转让记录</h6>
+                    {% if blockchain_records %}
+                    <div class="list-group">
+                        {% for record in blockchain_records %}
+                        <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    从 <strong>{{ record.from_user }}</strong> 
+                                    转让给 <strong>{{ record.to_user }}</strong>
+                                </div>
+                                <small class="text-muted">
+                                    {{ record.timestamp|datetime }}
+                                </small>
+                            </div>
+                            <small class="text-muted d-block mt-1">
+                                区块哈希: {{ record.block_hash }}
+                            </small>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <p class="text-muted">区块链上暂无记录</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

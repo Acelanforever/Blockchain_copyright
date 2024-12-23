@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}转让版权{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>转让版权</h4>
+                </div>
+                <div class="card-body">
+                    <h5>作品信息：{{ copyright.title }}</h5>
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="transferee" class="form-label">接收方用户名</label>
+                            <input type="text" class="form-control" id="transferee" name="transferee" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">发起转让</button>
+                        <a href="{{ url_for('copyright.detail', id=copyright.id) }}" class="btn btn-secondary">取消</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

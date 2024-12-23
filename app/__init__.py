@@ -25,9 +25,10 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
     
-    from app.routes import auth, copyright, blockchain
+    from app.routes import auth, copyright, blockchain, contract
     app.register_blueprint(auth.bp)
     app.register_blueprint(copyright.bp)
     app.register_blueprint(blockchain.bp)
+    app.register_blueprint(contract.bp)
     
     return app
