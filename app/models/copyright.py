@@ -17,7 +17,7 @@ class Copyright(db.Model):
             'title': self.title,
             'description': self.description,
             'content_hash': self.content_hash,
-            'timestamp': self.timestamp.isoformat(),
+            'timestamp': self.timestamp.timestamp(),
             'author': self.author.username,
             'block_hash': self.block_hash,
             'status': self.status

@@ -1,5 +1,6 @@
 from .block import Block
 import time
+import hashlib
 
 class Blockchain:
     def __init__(self):
@@ -40,3 +41,6 @@ class Blockchain:
                 return False
 
         return True 
+
+# 创建全局区块链实例
+blockchain = Blockchain()

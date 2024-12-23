@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}区块链浏览器{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2 class="mb-4">区块链浏览器</h2>
+    
+    <!-- 区块链可视化 -->
+    <div class="mb-5">
+        <h4>区块链结构</h4>
+        <div id="blockchain-visualizer" class="my-4"></div>
+    </div>
+
+    <!-- 区块列表 -->
+    <div class="row" id="blocks-container">
+        {% for block in blocks %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">区块 #{{ block.index }}</h5>
+                    <span class="badge bg-primary">{{ block.transactions }} 笔交易</span>
+                </div>
+                <div class="card-body">
+                    <div class="mb-2">
+                        <small class="text-muted">区块哈希:</small>
+                        <div class="text-break">
+                            <code>{{ block.hash }}</code>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">前块哈希:</small>
+                        <div class="text-break">
+                            <code>{{ block.previous_hash }}</code>
+                        </div>
+                    </div>
+                    <div>
+                        <small class="text-muted">时间戳:</small>
+                        <div>{{ block.timestamp|datetime }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- 引入 D3.js -->
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script src="{{ url_for('static', filename='js/blockchain-visualizer.js') }}"></script>
+{% endblock %} 
