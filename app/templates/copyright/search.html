@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}搜索版权{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <form class="d-flex" method="get">
+            <input class="form-control me-2" type="search" name="q" placeholder="搜索作品标题或描述" value="{{ request.args.get('q', '') }}">
+            <button class="btn btn-outline-primary" type="submit">搜索</button>
+        </form>
+    </div>
+</div>
+
+{% if request.args.get('q') %}
+<div class="row">
+    {% if copyrights %}
+        {% for copyright in copyrights %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ copyright.title }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">作者：{{ copyright.author.username }}</h6>
+                    <p class="card-text">{{ copyright.description[:200] }}...</p>
+                    <div class="text-muted small mb-2">
+                        登记时间：{{ copyright.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                    </div>
+                    <a href="{{ url_for('copyright.detail', id=copyright.id) }}" class="btn btn-sm btn-outline-primary">查看详情</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="col">
+            <div class="alert alert-info">
+                未找到相关作品
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}首页{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col">
+        <h2>最新版权登记</h2>
+    </div>
+    {% if current_user.is_authenticated %}
+    <div class="col text-end">
+        <a href="{{ url_for('copyright.upload') }}" class="btn btn-primary">上传新作品</a>
+    </div>
+    {% endif %}
+</div>
+
+<div class="row">
+    {% for copyright in copyrights %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ copyright.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">作者：{{ copyright.author.username }}</h6>
+                <p class="card-text">{{ copyright.description[:200] }}...</p>
+                <div class="text-muted small mb-2">
+                    登记时间：{{ copyright.timestamp.strftime('%Y-%m-%d %H:%M') }}
+                </div>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ url_for('copyright.detail', id=copyright.id) }}" class="btn btn-sm btn-outline-primary">查看详情</a>
+                    <span class="badge bg-{{ 'success' if copyright.status == 'confirmed' else 'warning' }}">
+                        {{ '已确认' if copyright.status == 'confirmed' else '待确认' }}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

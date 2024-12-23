@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}{{ copyright.title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="mb-0">{{ copyright.title }}</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <h5>作品信息</h5>
+                <p>{{ copyright.description }}</p>
+                <hr>
+                <div class="mb-3">
+                    <strong>作者：</strong> {{ copyright.author.username }}<br>
+                    <strong>登记时间：</strong> {{ copyright.timestamp.strftime('%Y-%m-%d %H:%M:%S') }}<br>
+                    <strong>状态：</strong> 
+                    <span class="badge bg-{{ 'success' if copyright.status == 'confirmed' else 'warning' }}">
+                        {{ '已确认' if copyright.status == 'confirmed' else '待确认' }}
+                    </span>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <h5>区块链信息</h5>
+                <div class="mb-3">
+                    <strong>内容哈希：</strong>
+                    <div class="text-break">
+                        <small>{{ copyright.content_hash }}</small>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <strong>区块哈希：</strong>
+                    <div class="text-break">
+                        <small>{{ copyright.block_hash }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
