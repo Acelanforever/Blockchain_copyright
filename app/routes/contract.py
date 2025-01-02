@@ -5,6 +5,7 @@ from app.models.copyright import Copyright
 from app import db
 from app.models.blockchain import blockchain  # 导入区块链实例
 
+# 创建一个名为'contract'的蓝图，用于处理版权转让相关的路由
 bp = Blueprint('contract', __name__, url_prefix='/contract')
 
 @bp.route('/transfer/<int:copyright_id>', methods=['GET', 'POST'])

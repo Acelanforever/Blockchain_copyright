@@ -3,6 +3,7 @@ from app.models.blockchain import blockchain, Block
 from app.models.copyright import Copyright
 from app import db
 
+# 创建一个名为'blockchain'的蓝图，用于处理区块链相关的路由
 bp = Blueprint('blockchain', __name__, url_prefix='/blockchain')
 
 def sync_blockchain_with_db():
@@ -41,6 +42,7 @@ def explorer():
     # 确保区块链与数据库同步
     sync_blockchain_with_db()
     
+    # 将区块链中的区块信息转换为字典列表，用于在模板中显示
     blocks = [{
         'index': block.index,
         'hash': block.hash,
@@ -54,6 +56,7 @@ def explorer():
 @bp.route('/api/blocks')
 def get_blocks():
     """获取所有区块的API"""
+    # 将区块链中的区块信息转换为字典列表，用于API返回
     blocks = [{
         'index': block.index,
         'hash': block.hash,
@@ -68,6 +71,7 @@ def get_block(index):
     """获取特定区块的API"""
     if index < len(blockchain.chain):
         block = blockchain.chain[index]
+        # 将特定区块的信息转换为字典，用于API返回
         return jsonify({
             'index': block.index,
             'hash': block.hash,
