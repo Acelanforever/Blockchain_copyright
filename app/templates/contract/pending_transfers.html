@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}待处理的转让请求{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h4>待处理的转让请求</h4>
+    {% if contracts %}
+    <div class="list-group">
+        {% for contract in contracts %}
+        <div class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <h5>{{ contract.copyright.title }}</h5>
+                    <p class="mb-1">转让方：{{ contract.owner.username }}</p>
+                    <small class="text-muted">请求时间：{{ contract.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</small>
+                </div>
+                <div>
+                    <form class="d-inline" action="{{ url_for('contract.confirm_transfer', contract_id=contract.id) }}" method="POST">
+                        <button type="submit" class="btn btn-success btn-sm">接受转让</button>
+                    </form>
+                    <form class="d-inline" action="{{ url_for('contract.reject_transfer', contract_id=contract.id) }}" method="POST">
+                        <button type="submit" class="btn btn-danger btn-sm">拒绝转让</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">暂无待处理的转让请求</p>
+    {% endif %}
+</div>
+{% endblock %} 

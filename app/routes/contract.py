@@ -4,6 +4,7 @@ from app.models.smart_contract import CopyrightContract
 from app.models.copyright import Copyright
 from app import db
 from app.models.blockchain import blockchain  # 导入区块链实例
+from datetime import datetime
 
 # 创建一个名为'contract'的蓝图，用于处理版权转让相关的路由
 bp = Blueprint('contract', __name__, url_prefix='/contract')
@@ -14,7 +15,6 @@ def initiate_transfer(copyright_id):
     """发起版权转让"""
     copyright = Copyright.query.get_or_404(copyright_id)
     
-    # 验证是否是版权所有者
     if copyright.user_id != current_user.id:
         flash('你不是该版权的所有者')
         return redirect(url_for('copyright.detail', id=copyright_id))
@@ -28,17 +28,23 @@ def initiate_transfer(copyright_id):
             flash('接收方用户不存在')
             return redirect(url_for('contract.initiate_transfer', copyright_id=copyright_id))
             
+        # 创建新的转让合约，只包含必要字段
         contract = CopyrightContract(
             copyright_id=copyright_id,
             owner_id=current_user.id,
-            transferee_id=transferee.id
+            transferee_id=transferee.id,
+            status='pending'
         )
         
-        db.session.add(contract)
-        db.session.commit()
-        
-        flash('转让请求已发送')
-        return redirect(url_for('copyright.detail', id=copyright_id))
+        try:
+            db.session.add(contract)
+            db.session.commit()
+            flash('转让请求已发送')
+            return redirect(url_for('copyright.detail', id=copyright_id))
+        except Exception as e:
+            db.session.rollback()
+            flash(f'发生错误：{str(e)}')
+            return redirect(url_for('contract.initiate_transfer', copyright_id=copyright_id))
         
     return render_template('contract/transfer.html', copyright=copyright)
 
@@ -91,3 +97,35 @@ def confirm_transfer(contract_id):
         flash(message)
         
     return redirect(url_for('copyright.detail', id=contract.copyright_id)) 
+
+@bp.route('/pending_transfers')
+@login_required
+def pending_transfers():
+    """显示待处理的转让请求"""
+    # 查询作为接收方的待处理转让
+    pending_contracts = CopyrightContract.query.filter_by(
+        transferee_id=current_user.id,
+        status='pending'
+    ).all()
+    
+    return render_template('contract/pending_transfers.html', contracts=pending_contracts) 
+
+@bp.route('/reject/<int:contract_id>', methods=['POST'])
+@login_required
+def reject_transfer(contract_id):
+    """拒绝转让"""
+    contract = CopyrightContract.query.get_or_404(contract_id)
+    
+    # 验证是否是接收方
+    if contract.transferee_id != current_user.id:
+        flash('你不是该转让的接收方')
+        return redirect(url_for('contract.pending_transfers'))
+        
+    success, message = contract.reject_transfer()
+    if success:
+        db.session.commit()
+        flash('已拒绝版权转让')
+    else:
+        flash(message)
+        
+    return redirect(url_for('contract.pending_transfers')) 

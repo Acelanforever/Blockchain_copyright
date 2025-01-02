@@ -30,6 +30,17 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('blockchain.explorer') }}">区块链浏览器</a>
                     </li>
+                    {% if current_user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('contract.pending_transfers') }}">
+                            待处理转让
+                            {% set pending_count = current_user.transfer_in_contracts|selectattr('status', 'equalto', 'pending')|list|length %}
+                            {% if pending_count > 0 %}
+                                <span class="badge bg-danger">{{ pending_count }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
                 <ul class="navbar-nav">
                     {% if current_user.is_authenticated %}
