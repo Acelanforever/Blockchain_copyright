@@ -45,4 +45,10 @@ instance/
 .webassets-cache
 
 # Log files
-*.log 
+*.log
+
+# Environment variables
+.env
+
+# Local development settings
+local_settings.py

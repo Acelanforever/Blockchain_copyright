@@ -67,6 +67,7 @@ def upload():
                 
                 # 添加到区块链
                 transaction = copyright.to_dict()
+                
                 blockchain.add_transaction(transaction)
                 block = blockchain.mine_pending_transactions(current_user.username)
                 
