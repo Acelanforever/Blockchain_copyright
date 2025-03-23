@@ -18,7 +18,7 @@
         <div class="col-md-6 mb-4">
             <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">区块 #{{ block.index }}</h5>
+                    <h5 class="mb-0"><a href="{{ url_for('blockchain.block_detail', index=block.index) }}" class="text-decoration-none">区块 #{{ block.index }}</a></h5>
                     <span class="badge bg-primary">{{ block.transactions }} 笔交易</span>
                 </div>
                 <div class="card-body">
@@ -48,4 +48,4 @@
 <!-- 引入 D3.js -->
 <script src="https://d3js.org/d3.v7.min.js"></script>
 <script src="{{ url_for('static', filename='js/blockchain-visualizer.js') }}"></script>
-{% endblock %} 
+{% endblock %}

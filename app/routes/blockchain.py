@@ -79,4 +79,20 @@ def get_block(index):
             'timestamp': block.timestamp,
             'transactions': block.transactions
         })
-    return jsonify({'error': '区块不存在'}), 404 
+    return jsonify({'error': '区块不存在'}), 404
+
+@bp.route('/block/<int:index>')
+def block_detail(index):
+    """区块详情页面"""
+    if index < len(blockchain.chain):
+        block = blockchain.chain[index]
+        # 将区块信息转换为字典，用于在模板中显示
+        block_data = {
+            'index': block.index,
+            'hash': block.hash,
+            'previous_hash': block.previous_hash,
+            'timestamp': block.timestamp,
+            'transactions': block.transactions
+        }
+        return render_template('blockchain/block_detail.html', block=block_data)
+    return render_template('errors/404.html'), 404

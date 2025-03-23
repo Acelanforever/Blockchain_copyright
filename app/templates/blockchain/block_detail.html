@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}区块详情{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="mb-3">
+        <a href="{{ url_for('blockchain.explorer') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> 返回区块链浏览器
+        </a>
+    </div>
+
+    <h2 class="mb-4">区块 #{{ block.index }} 详情</h2>
+    
+    <div class="card mb-4">
+        <div class="card-header">
+            <h5 class="mb-0">区块信息</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-2">
+                <div class="col-md-3"><strong>区块索引:</strong></div>
+                <div class="col-md-9">{{ block.index }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-3"><strong>区块哈希:</strong></div>
+                <div class="col-md-9">
+                    <code class="text-break">{{ block.hash }}</code>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-3"><strong>前块哈希:</strong></div>
+                <div class="col-md-9">
+                    <code class="text-break">{{ block.previous_hash }}</code>
+                </div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-3"><strong>时间戳:</strong></div>
+                <div class="col-md-9">{{ block.timestamp|datetime }}</div>
+            </div>
+            <div class="row mb-2">
+                <div class="col-md-3"><strong>交易数量:</strong></div>
+                <div class="col-md-9">{{ block.transactions|length }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">交易记录</h5>
+        </div>
+        <div class="card-body">
+            {% if block.transactions|length > 0 %}
+                {% for transaction in block.transactions %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6 class="card-title">{{ transaction.title }}</h6>
+                        <p class="card-text">{{ transaction.description }}</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">内容哈希: <code>{{ transaction.content_hash }}</code></small>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">作者: {{ transaction.author }}</small>
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-md-6">
+                                <small class="text-muted">时间: {{ transaction.timestamp|datetime }}</small>
+                            </div>
+                            <div class="col-md-6">
+                                <small class="text-muted">状态: {{ transaction.status }}</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="alert alert-info">此区块没有交易记录</div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
